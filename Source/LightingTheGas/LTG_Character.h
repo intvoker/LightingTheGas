@@ -27,7 +27,7 @@ public:
 
 protected:
 	// To add mapping context
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
