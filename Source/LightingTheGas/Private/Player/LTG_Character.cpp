@@ -1,6 +1,7 @@
 // Copyright intvoker. All Rights Reserved.
 
-#include "LTG_Character.h"
+#include "Player/LTG_Character.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
