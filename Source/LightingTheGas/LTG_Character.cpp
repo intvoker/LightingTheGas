@@ -75,7 +75,7 @@ void ALTG_Character::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void ALTG_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void ALTG_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
