@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright intvoker. All Rights Reserved.
 
 #include "LightingTheGas.h"
 #include "Modules/ModuleManager.h"
