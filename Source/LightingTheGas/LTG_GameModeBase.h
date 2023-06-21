@@ -14,6 +14,3 @@ class ALTG_GameModeBase : public AGameModeBase
 public:
 	ALTG_GameModeBase();
 };
-
-
-

@@ -3,5 +3,4 @@
 #include "LightingTheGas.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, LightingTheGas, "LightingTheGas" );
- 
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, LightingTheGas, "LightingTheGas");
