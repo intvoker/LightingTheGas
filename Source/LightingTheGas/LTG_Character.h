@@ -5,11 +5,11 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "LightingTheGasCharacter.generated.h"
+#include "LTG_Character.generated.h"
 
 
 UCLASS(config=Game)
-class ALightingTheGasCharacter : public ACharacter
+class ALTG_Character : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -38,7 +38,7 @@ class ALightingTheGasCharacter : public ACharacter
 	class UInputAction* LookAction;
 
 public:
-	ALightingTheGasCharacter();
+	ALTG_Character();
 	
 
 protected:

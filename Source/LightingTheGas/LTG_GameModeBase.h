@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "LightingTheGasGameMode.generated.h"
+#include "LTG_GameModeBase.generated.h"
 
 UCLASS(minimalapi)
-class ALightingTheGasGameMode : public AGameModeBase
+class ALTG_GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	ALightingTheGasGameMode();
+	ALTG_GameModeBase();
 };
 
 
