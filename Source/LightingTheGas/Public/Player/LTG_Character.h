@@ -6,15 +6,15 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "LTG_CharacterData.h"
 #include "LTG_Character.generated.h"
 
 class UCameraComponent;
-class UGameplayAbility;
-class UGameplayEffect;
 class UInputAction;
 class UInputMappingContext;
 class ULTG_AbilitySystemComponent;
 class ULTG_AttributeSet;
+class ULTG_CharacterDataAsset;
 class USpringArmComponent;
 
 UCLASS(config=Game)
@@ -30,6 +30,8 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	virtual void PostInitializeComponents() override;
+
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 protected:
@@ -39,11 +41,11 @@ protected:
 	UPROPERTY(Transient)
 	ULTG_AttributeSet* AttributeSet;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GAS")
-	TArray<TSubclassOf<UGameplayAbility>> DefaultGameplayAbilityClasses;
+	UPROPERTY()
+	FLTG_CharacterData DefaultCharacterData;
 
-	UPROPERTY(EditDefaultsOnly, Category = "GAS")
-	TArray<TSubclassOf<UGameplayEffect>> DefaultGameplayEffectClasses;
+	UPROPERTY(EditDefaultsOnly)
+	ULTG_CharacterDataAsset* CharacterDataAsset;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GAS")
 	float DefaultLevel = 1.0f;

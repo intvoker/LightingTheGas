@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "DataAssets/LTG_CharacterDataAsset.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -60,6 +61,16 @@ ALTG_Character::ALTG_Character()
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<ULTG_AttributeSet>(TEXT("AttributeSet"));
+}
+
+void ALTG_Character::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (CharacterDataAsset)
+	{
+		DefaultCharacterData = CharacterDataAsset->CharacterData;
+	}
 }
 
 UAbilitySystemComponent* ALTG_Character::GetAbilitySystemComponent() const
@@ -161,7 +172,7 @@ void ALTG_Character::GiveDefaultAbilities()
 	if (!HasAuthority())
 		return;
 
-	for (const auto DefaultGameplayAbilityClass : DefaultGameplayAbilityClasses)
+	for (const auto DefaultGameplayAbilityClass : DefaultCharacterData.GameplayAbilityClasses)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(DefaultGameplayAbilityClass));
 	}
@@ -175,7 +186,7 @@ void ALTG_Character::ApplyDefaultEffects()
 	auto EffectContext = AbilitySystemComponent->MakeEffectContext();
 	EffectContext.AddSourceObject(this);
 
-	for (const auto DefaultGameplayEffectClass : DefaultGameplayEffectClasses)
+	for (const auto DefaultGameplayEffectClass : DefaultCharacterData.GameplayEffectClasses)
 	{
 		if (const auto SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
 			DefaultGameplayEffectClass, DefaultLevel, EffectContext); SpecHandle.IsValid())
