@@ -2,6 +2,8 @@
 
 #include "Player/LTG_Character.h"
 
+#include "AbilitySystem/LTG_AbilitySystemComponent.h"
+#include "AbilitySystem/LTG_AttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -52,6 +54,17 @@ ALTG_Character::ALTG_Character()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	// Camera does not rotate relative to arm
 	FollowCamera->bUsePawnControlRotation = false;
+
+	AbilitySystemComponent = CreateDefaultSubobject<ULTG_AbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
+	AttributeSet = CreateDefaultSubobject<ULTG_AttributeSet>(TEXT("AttributeSet"));
+}
+
+UAbilitySystemComponent* ALTG_Character::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void ALTG_Character::BeginPlay()
@@ -123,5 +136,51 @@ void ALTG_Character::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void ALTG_Character::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	GiveDefaultAbilities();
+	ApplyDefaultEffects();
+}
+
+void ALTG_Character::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
+void ALTG_Character::GiveDefaultAbilities()
+{
+	if (!HasAuthority())
+		return;
+
+	for (const auto DefaultGameplayAbilityClass : DefaultGameplayAbilityClasses)
+	{
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(DefaultGameplayAbilityClass));
+	}
+}
+
+void ALTG_Character::ApplyDefaultEffects()
+{
+	if (!HasAuthority())
+		return;
+
+	auto EffectContext = AbilitySystemComponent->MakeEffectContext();
+	EffectContext.AddSourceObject(this);
+
+	for (const auto DefaultGameplayEffectClass : DefaultGameplayEffectClasses)
+	{
+		if (const auto SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(
+			DefaultGameplayEffectClass, DefaultLevel, EffectContext); SpecHandle.IsValid())
+		{
+			AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+		}
 	}
 }

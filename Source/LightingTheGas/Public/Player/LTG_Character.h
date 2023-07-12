@@ -3,17 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "LTG_Character.generated.h"
 
 class UCameraComponent;
+class UGameplayAbility;
+class UGameplayEffect;
 class UInputAction;
 class UInputMappingContext;
+class ULTG_AbilitySystemComponent;
+class ULTG_AttributeSet;
 class USpringArmComponent;
 
 UCLASS(config=Game)
-class ALTG_Character : public ACharacter
+class ALTG_Character : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -25,7 +30,24 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+
 protected:
+	UPROPERTY(EditDefaultsOnly)
+	ULTG_AbilitySystemComponent* AbilitySystemComponent;
+
+	UPROPERTY(Transient)
+	ULTG_AttributeSet* AttributeSet;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GAS")
+	TArray<TSubclassOf<UGameplayAbility>> DefaultGameplayAbilityClasses;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GAS")
+	TArray<TSubclassOf<UGameplayEffect>> DefaultGameplayEffectClasses;
+
+	UPROPERTY(EditDefaultsOnly, Category = "GAS")
+	float DefaultLevel = 1.0f;
+
 	// To add mapping context
 	virtual void BeginPlay() override;
 
@@ -37,6 +59,14 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	virtual void PossessedBy(AController* NewController) override;
+
+	virtual void OnRep_PlayerState() override;
+
+	void GiveDefaultAbilities();
+
+	void ApplyDefaultEffects();
 
 private:
 	/** Camera boom positioning the camera behind the character */
