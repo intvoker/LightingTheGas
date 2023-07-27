@@ -23,7 +23,7 @@ class ALTG_Character : public ACharacter, public IAbilitySystemInterface
 	GENERATED_BODY()
 
 public:
-	ALTG_Character();
+	ALTG_Character(const FObjectInitializer& ObjectInitializer);
 
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

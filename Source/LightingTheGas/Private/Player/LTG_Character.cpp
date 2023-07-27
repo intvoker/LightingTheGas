@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/LTG_CharacterMovementComponent.h"
 #include "DataAssets/LTG_CharacterDataAsset.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -17,7 +18,8 @@
 //////////////////////////////////////////////////////////////////////////
 // ALTG_Character
 
-ALTG_Character::ALTG_Character()
+ALTG_Character::ALTG_Character(const FObjectInitializer& ObjectInitializer):
+	Super(ObjectInitializer.SetDefaultSubobjectClass<ULTG_CharacterMovementComponent>(CharacterMovementComponentName))
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
